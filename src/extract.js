@@ -2,15 +2,23 @@ import { readFileSync, writeFileSync } from "fs";
 import encode from "image-encode";
 import { argv } from "process";
 
-if (argv.length !== 4) {
+if (argv.length !== 5) {
   console.log(`Received ${argv.length - 2} arguments. Expected 2\n`);
-  console.log("Usage: node extract.js [input.bin] [output.png]");
+  console.log("Usage: node extract.js [icon|platform] [input.bin] [output.png]");
 
   process.exit(1);
 }
 
-const inputFile = argv[2];
-const outputFile = argv[3];
+const mode = argv[2];
+
+if (mode !== "icon" && mode !== "platform") {
+  console.log(`Received invalid arguement: ${mode}`);
+  console.log("Valid options are: icon, platform");
+  console.log("Usage: node extract.js [icon|platform] [input.bin] [output.png]");
+}
+
+const inputFile = argv[3];
+const outputFile = argv[4];
 
 const buffer = readFileSync(inputFile);
 
@@ -28,8 +36,16 @@ for (let i = 0; i < buffer.length; i += 2) {
   j += 4;
 }
 
-const width = 165;
-const height = 521;
+var width = 0;
+var height = 0;
+
+if (mode == "platform") {
+  width = 165;
+  height = 521;
+} else if mode == "icon" {
+  width = 36;
+  height = 36;
+}
 
 let rotatedImage = Buffer.alloc(rgba.length);
 
