@@ -2,15 +2,15 @@ import { writeFileSync } from "fs";
 import pixels from "image-pixels";
 import { argv } from "process";
 
-if (argv.length !== 4) {
+if (argv.length !== 3) {
   console.log(`Received ${argv.length - 2} arguments. Expected 2\n`);
   console.log("Usage: node create.js [input.png] [output.bin]");
 
   process.exit(1);
 }
 
-const inputFile = argv[2];
-const outputFile = argv[3];
+const inputFile = `images/png/${argv[2]}.png`;
+const outputFile = `images/bin/${argv[2]}.bin`;
 
 const create = async () => {
   let { data, width, height } = await pixels(inputFile);
